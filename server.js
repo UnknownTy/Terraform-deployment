@@ -5,7 +5,7 @@ const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
 
-const mongoDatabase = require("./database/mongoDatabase");
+// const mongoDatabase = require("./database/mongoDatabase");
 const mysqlDatabase = require("./database/mysqlDatabase");
 
 const makePostsRouter = require("./routers/postsRouter");
