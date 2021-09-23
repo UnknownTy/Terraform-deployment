@@ -5,17 +5,18 @@ const express = require("express")
 
 const s3Manager = require("./s3manager")
 
-
 const multer = require("multer")
 
-module.exports = function ({uploadsPath, bucketName, region}) {
-  const s3 = bucketName ? s3Manager({ bucketName, region }) : null;
+module.exports = function ({ uploadsPath, bucketName, region }) {
+  const s3 = bucketName ? s3Manager({ bucketName, region }) : null
 
   const upload = multer({ dest: uploadsPath })
 
-let postImageUpload = !s3
+  let postImageUpload = !s3
     ? upload.single("image")
-    : async (req, res, next) => {
+    : [
+        upload.single("image"),
+        async (req, res, next) => {
           if (req.body.type !== "file") {
             next()
             return
@@ -38,14 +39,15 @@ let postImageUpload = !s3
             console.error(error)
             res.status(500).send({ error: "Couldn't upload image" })
           }
-        }
+        },
+      ]
 
   const imagesRouter = express.Router()
 
   imagesRouter.get("/api/postImages/:filename", (req, res) => {
     const { filename } = req.params
     if (!s3) {
-      res.sendFile(path.join(uploadsPath, filename));
+      res.sendFile(path.join(uploadsPath, filename))
       return
     }
     const stream = s3.getStream({ fileKey: filename })
