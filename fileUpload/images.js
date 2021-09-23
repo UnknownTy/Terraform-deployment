@@ -13,10 +13,9 @@ module.exports = function ({uploadsPath, bucketName, region}) {
 
   const upload = multer({ dest: uploadsPath })
 
-  let postImageUpload = !s3
+let postImageUpload = !s3
     ? upload.single("image")
     : async (req, res, next) => {
-        postImageUpload(req, res, async () => {
           if (req.body.type !== "file") {
             next()
             return
@@ -39,8 +38,7 @@ module.exports = function ({uploadsPath, bucketName, region}) {
             console.error(error)
             res.status(500).send({ error: "Couldn't upload image" })
           }
-        })
-      }
+        }
 
   const imagesRouter = express.Router()
 
