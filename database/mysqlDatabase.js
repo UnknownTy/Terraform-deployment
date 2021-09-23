@@ -166,7 +166,7 @@ module.exports = async function ({host, user, password, database}) {
     }
 
     if (!options.password) {
-      return { email: user.email, username: user.password }
+      return { email: user.email, username: user.username }
     }
 
     const same = await bcrypt.compare(options.password, user.password)
