@@ -17,11 +17,14 @@ module.exports = function ({ uploadsPath, bucketName, region }) {
     : [
         upload.single("image"),
         async (req, res, next) => {
+          console.log("Atempting to upload file to s3...")
           if (req.body.type !== "file") {
+            console.error("no file to upload in req.body")
             next()
             return
           }
           if (!req.file || !req.file.filename) {
+            console.error("Tried to upload an invalid image")
             res.status(422).send({ error: "Select a valid image" })
             return
           }
@@ -36,7 +39,7 @@ module.exports = function ({ uploadsPath, bucketName, region }) {
             })
             next()
           } catch (error) {
-            console.error(error)
+            console.error(error, req.file.filename)
             res.status(500).send({ error: "Couldn't upload image" })
           }
         },
@@ -50,6 +53,7 @@ module.exports = function ({ uploadsPath, bucketName, region }) {
       res.sendFile(path.join(uploadsPath, filename))
       return
     }
+    console.log("Atempting to get file from s3", filename)
     const stream = s3.getStream({ fileKey: filename })
     stream.pipe(res)
   })
