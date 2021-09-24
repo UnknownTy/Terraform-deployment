@@ -71,7 +71,6 @@ mysqlDatabase(mysqlConfig).then((database) => {
       console.log(err)
       ec2 = "error"
     }
-    console.log(data)
     res.send(data)
   })
 
