@@ -53,7 +53,7 @@ module.exports = function ({ uploadsPath, bucketName, region }) {
       res.sendFile(path.join(uploadsPath, filename))
       return
     }
-    console.log("Atempting to get file from s3", filename)
+    console.log("Attempting to get file from s3", filename)
     const stream = s3.getStream({ fileKey: filename })
     stream.pipe(res)
   })

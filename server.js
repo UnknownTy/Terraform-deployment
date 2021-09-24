@@ -60,6 +60,20 @@ mysqlDatabase(mysqlConfig).then((database) => {
   });
   app.use("/graphql", graphQL);
 
+  app.get("/api/ec2", async (req, res) => {
+    let ec2 = {}
+    try {
+      ec2.ipv4 = await ec2Meta.ipv4()
+      ec2.hostname = await ec2Meta.hostname()
+      ec2.instanceId = await ec2Meta.instanceId()
+    } catch (err) {
+      console.log(err)
+      ec2 = "error"
+    }
+    console.log(data)
+    res.send(data)
+  })
+
   // Handles any requests that don't match the ones above
   app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname + "/client/build/index.html"));
