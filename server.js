@@ -37,7 +37,6 @@ const mysqlConfig = {
   password: process.env.MYSQL_PASSWORD,
   database: process.env.MYSQL_DATABASE,
 };
-console.log(mysqlConfig);
 mysqlDatabase(mysqlConfig).then((database) => {
   const postsRouter = makePostsRouter({
     database,
@@ -71,7 +70,7 @@ mysqlDatabase(mysqlConfig).then((database) => {
       console.log(err)
       ec2 = "error"
     }
-    res.send(data)
+    res.send(ec2)
   })
 
   // Handles any requests that don't match the ones above
