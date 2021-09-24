@@ -4,6 +4,7 @@ const path = require("path");
 
 const express = require("express");
 const morgan = require("morgan");
+const ec2Meta = require('./ec2Meta')
 
 // const mongoDatabase = require("./database/mongoDatabase");
 const mysqlDatabase = require("./database/mysqlDatabase");
