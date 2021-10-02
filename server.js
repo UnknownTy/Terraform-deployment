@@ -66,6 +66,8 @@ mysqlDatabase(mysqlConfig).then((database) => {
       ec2.ipv4 = await ec2Meta.ipv4()
       ec2.hostname = await ec2Meta.hostname()
       ec2.instanceId = await ec2Meta.instanceId()
+      ec2.publicIPv4 = await ec2Meta.publicIPv4();
+      ec2.amiID = await ec2Meta.amiID();
     } catch (err) {
       console.log(err)
       ec2 = "error"
