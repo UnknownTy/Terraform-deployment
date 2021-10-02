@@ -27,7 +27,7 @@ async function iamInfo() {
     return {}
   }
 }
-exports.ipv4 = iamInfo;
+exports.iamInfo = iamInfo;
 
 async function publicIPv4() {
   const result = await instance.get("/public-ipv4");
