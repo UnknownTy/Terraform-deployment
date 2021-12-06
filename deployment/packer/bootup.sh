@@ -11,6 +11,7 @@ sudo yum install -y nodejs
 
 sudo yum install tar -y
 cd ~/ && tar -xf social_something.tgz
+cd ~/ && npm i --only=prod
 
 sudo mv /tmp/socialSomething.service /etc/systemd/system/socialSomething.service && echo Moved service file
 sudo systemctl enable socialSomething.service && echo Enabled socialSomething service
