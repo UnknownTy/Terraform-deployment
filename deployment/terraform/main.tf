@@ -38,15 +38,25 @@ module "network_vpc" {
   pub_lb_subnet_3 = "10.0.32.0/24"
 }
 
+module "mysql_database" {
+  source = "./modules/DB"
+
+  db_sg = module.network_vpc.rds_sg_id
+  db_az = data.aws_availability_zones.available.names[1]
+  database_admin_password = var.database_admin_password
+  rds_private_subnets = module.network_vpc.priv_rds_subnets
+}
+
+
 module "app_instances" {
   source = "./modules/EC2"
 
   private_subnets = module.network_vpc.priv_ec2_subnets
   private_sg = module.network_vpc.ec2_sg_id
-  DBip = ""
-  DBUsername = "" 
-  DBPassword = ""
-  DBName = ""
+  DBip = module.mysql_database.DBip
+  DBUsername = module.mysql_database.DBUsername
+  DBPassword = var.database_admin_password
+  DBName = module.mysql_database.DBName
   S3_name = ""
   region = var.region
 }
