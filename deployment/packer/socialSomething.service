@@ -1,0 +1,18 @@
+[Unit]
+Description=Social Something Web App
+After=cloud-file.service
+
+[Service]
+WorkingDirectory=/home/ec2-user/
+ExecStart=/bin/node /home/ec2-user/server.js
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=social_something_full
+User=ec2-user
+EnvironmentFile=/home/ec2-user/app.env
+
+[Install]
+WantedBy=multi-user.target
+WantedBy=cloud-init.target
