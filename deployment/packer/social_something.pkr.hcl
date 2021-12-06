@@ -26,7 +26,7 @@ source "amazon-ebs" "socialSomething" {
         owners      = ["amazon"]
     }
     instance_type = "t2.micro"
-    region = locals.region
+    region = local.region
     ssh_username = "ec2-user"
 }
 
