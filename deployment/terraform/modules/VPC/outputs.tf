@@ -1,0 +1,34 @@
+output "vpc_id" {
+    value = aws_vpc.main.id
+}
+output "priv_ec2_subnets" {
+    value = [
+        aws_subnet.priv_ec2_subnet_1.id,
+        aws_subnet.priv_ec2_subnet_2.id,
+        aws_subnet.priv_ec2_subnet_3.id
+    ]
+}
+output "priv_rds_subnets" {
+    value = [
+        aws_subnet.priv_rds_subnet_1.id,
+        aws_subnet.priv_rds_subnet_2.id,
+        aws_subnet.priv_rds_subnet_3.id
+    ]
+}
+output "pub_lb_subnets" {
+    value = [
+        aws_subnet.pub_lb_subnet_1.id,
+        aws_subnet.pub_lb_subnet_2.id,
+        aws_subnet.pub_lb_subnet_3.id
+    ]
+}
+
+output "rds_sg_id" {
+    value = aws_security_group.database_sg.id
+}
+output "ec2_sg_id" {
+    value = aws_security_group.private_sg.id
+}
+output "pub_http_sg_id" {
+    value = aws_security_group.public_sg.id
+}

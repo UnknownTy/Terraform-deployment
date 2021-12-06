@@ -11,3 +11,29 @@ terraform {
 provider "aws" {
   region = var.region
 }
+
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
+module "network_vpc" {
+  source = "./modules/vpc"
+
+  az1            = data.aws_availability_zones.available.names[0]
+  az2            = data.aws_availability_zones.available.names[1]
+  az3            = data.aws_availability_zones.available.names[2]
+  
+  vpc_cidr_block = "10.0.0.0/16"
+  
+  priv_ec2_subnet_1 = "10.0.10.0/24"
+  priv_ec2_subnet_2 = "10.0.11.0/24"
+  priv_ec2_subnet_3 = "10.0.12.0/24"
+
+  priv_rds_subnet_1 = "10.0.20.0/24"
+  priv_rds_subnet_2 = "10.0.21.0/24"
+  priv_rds_subnet_3 = "10.0.22.0/24"
+  
+  pub_lb_subnet_1 = "10.0.30.0/24"
+  pub_lb_subnet_2 = "10.0.31.0/24"
+  pub_lb_subnet_3 = "10.0.32.0/24"
+}
