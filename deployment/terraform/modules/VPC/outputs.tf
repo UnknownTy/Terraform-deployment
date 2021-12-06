@@ -3,23 +3,23 @@ output "vpc_id" {
 }
 output "priv_ec2_subnets" {
     value = [
-        aws_subnet.priv_ec2_subnet_1.id,
-        aws_subnet.priv_ec2_subnet_2.id,
-        aws_subnet.priv_ec2_subnet_3.id
+        aws_subnet.ec2_priv_subnet_1.id,
+        aws_subnet.ec2_priv_subnet_2.id,
+        aws_subnet.ec2_priv_subnet_3.id
     ]
 }
 output "priv_rds_subnets" {
     value = [
-        aws_subnet.priv_rds_subnet_1.id,
-        aws_subnet.priv_rds_subnet_2.id,
-        aws_subnet.priv_rds_subnet_3.id
+        aws_subnet.rds_priv_subnet_1.id,
+        aws_subnet.rds_priv_subnet_2.id,
+        aws_subnet.rds_priv_subnet_3.id
     ]
 }
 output "pub_lb_subnets" {
     value = [
-        aws_subnet.pub_lb_subnet_1.id,
-        aws_subnet.pub_lb_subnet_2.id,
-        aws_subnet.pub_lb_subnet_3.id
+        aws_subnet.public_subnet_1.id,
+        aws_subnet.public_subnet_2.id,
+        aws_subnet.public_subnet_3.id
     ]
 }
 

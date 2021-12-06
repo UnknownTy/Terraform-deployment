@@ -17,7 +17,7 @@ data "aws_availability_zones" "available" {
 }
 
 module "network_vpc" {
-  source = "./modules/vpc"
+  source = "./modules/VPC"
 
   az1            = data.aws_availability_zones.available.names[0]
   az2            = data.aws_availability_zones.available.names[1]
@@ -36,4 +36,17 @@ module "network_vpc" {
   pub_lb_subnet_1 = "10.0.30.0/24"
   pub_lb_subnet_2 = "10.0.31.0/24"
   pub_lb_subnet_3 = "10.0.32.0/24"
+}
+
+module "app_instances" {
+  source = "./modules/EC2"
+
+  private_subnets = module.network_vpc.priv_ec2_subnets
+  private_sg = module.network_vpc.ec2_sg_id
+  DBip = ""
+  DBUsername = "" 
+  DBPassword = ""
+  DBName = ""
+  S3_name = ""
+  region = var.region
 }

@@ -1,0 +1,14 @@
+#cloud-config
+write_files:
+  - path: /home/ec2-user/app.env
+    owner: ec2-user:ec2-user
+    permissions: "0644"
+    content: |
+      MYSQL_HOST=${db_ip}
+      MYSQL_USER=${db_user}
+      MYSQL_PASSWORD=${db_password}
+      MYSQL_DATABASE=${db_name}
+      BUCKET_REGION=${s3_region}
+      BUCKET_NAME=${s3_name}
+runcmd:
+  - [ systemctl, restart, --no-block, socialSomething.service ]

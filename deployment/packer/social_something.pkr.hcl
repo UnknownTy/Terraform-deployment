@@ -9,7 +9,7 @@ packer{
 }
 
 locals {
-    region    = "ca-central-1"
+    region    = "us-west-2"
     timestamp = regex_replace(timestamp(), "[- TZ:]", "")
 }
 
