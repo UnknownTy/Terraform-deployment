@@ -10,7 +10,7 @@ variable "vpc_id" {
     description = "VPC of the entire application"
     type = string
 }
-variable "instance_ids" {
-    description = "Instances for the LB to direct to"
-    type = list
-}
+// variable "instance_ids" {
+//     description = "Instances for the LB to direct to"
+//     type = list
+// }

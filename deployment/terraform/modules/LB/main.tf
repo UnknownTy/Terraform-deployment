@@ -29,23 +29,23 @@ resource "aws_lb_target_group" "app_tg" {
     vpc_id   = var.vpc_id
 }
 
-# Direct the traffic to the ec2 instance
-resource "aws_lb_target_group_attachment" "app_attachment_1" {
-  port             = 8080
-  target_group_arn = aws_lb_target_group.app_tg.arn
-  # The id of the ec2 instance:
-  target_id        = var.instance_ids[0]
-}
-resource "aws_lb_target_group_attachment" "app_attachment_2" {
-  port             = 8080
-  target_group_arn = aws_lb_target_group.app_tg.arn
-  # The id of the ec2 instance:
-  target_id        = var.instance_ids[1]
-}
-resource "aws_lb_target_group_attachment" "app_attachment_3" {
-  port             = 8080
-  target_group_arn = aws_lb_target_group.app_tg.arn
-  # The id of the ec2 instance:
-  target_id        = var.instance_ids[2]
-}
+// # Direct the traffic to the ec2 instance
+// resource "aws_lb_target_group_attachment" "app_attachment_1" {
+//   port             = 8080
+//   target_group_arn = aws_lb_target_group.app_tg.arn
+//   # The id of the ec2 instance:
+//   target_id        = var.instance_ids[0]
+// }
+// resource "aws_lb_target_group_attachment" "app_attachment_2" {
+//   port             = 8080
+//   target_group_arn = aws_lb_target_group.app_tg.arn
+//   # The id of the ec2 instance:
+//   target_id        = var.instance_ids[1]
+// }
+// resource "aws_lb_target_group_attachment" "app_attachment_3" {
+//   port             = 8080
+//   target_group_arn = aws_lb_target_group.app_tg.arn
+//   # The id of the ec2 instance:
+//   target_id        = var.instance_ids[2]
+// }
 

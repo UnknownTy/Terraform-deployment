@@ -6,6 +6,10 @@ variable "private_sg" {
     description = "Security group to connect to"
     type = string
 }
+variable "target_arn" {
+    description = "ARN for the LB's target group"
+    type = string
+}
 
 variable "DBip" {
     description = "Address of the mysql database"
