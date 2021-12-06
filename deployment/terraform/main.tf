@@ -47,7 +47,6 @@ module "mysql_database" {
   rds_private_subnets = module.network_vpc.priv_rds_subnets
 }
 
-
 module "app_instances" {
   source = "./modules/EC2"
 
@@ -59,4 +58,13 @@ module "app_instances" {
   DBName = module.mysql_database.DBName
   S3_name = ""
   region = var.region
+}
+
+module "load_balancer" {
+  source = "./modules/LB"
+
+  public_sg_id = module.network_vpc.pub_http_sg_id
+  public_subnets = module.network_vpc.pub_lb_subnets
+  vpc_id = module.network_vpc.vpc_id
+  instance_ids = module.app_instances.app_ids
 }
