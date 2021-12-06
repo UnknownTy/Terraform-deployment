@@ -10,6 +10,10 @@ variable "target_arn" {
     description = "ARN for the LB's target group"
     type = string
 }
+variable "instance_profile_arn" {
+    description = "Cloudwatch & S3 Profile ARN"
+    type = string
+}
 
 variable "DBip" {
     description = "Address of the mysql database"

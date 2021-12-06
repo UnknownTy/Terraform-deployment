@@ -46,6 +46,16 @@ module "mysql_database" {
   database_admin_password = var.database_admin_password
   rds_private_subnets = module.network_vpc.priv_rds_subnets
 }
+module "bucket" {
+  source = "./modules/S3"
+
+  bucket_name = var.bucket_name
+}
+module "iam_roles" {
+  source = "./modules/IAM"
+
+  bucket_name = var.bucket_name
+}
 
 module "load_balancer" {
   source = "./modules/LB"
@@ -62,10 +72,11 @@ module "app_instances" {
   private_subnets = module.network_vpc.priv_ec2_subnets
   private_sg = module.network_vpc.ec2_sg_id
   target_arn = module.load_balancer.lb_target_arn
+  instance_profile_arn = module.iam_roles.instance_profile_arn
   DBip = module.mysql_database.DBip
   DBUsername = module.mysql_database.DBUsername
   DBPassword = var.database_admin_password
   DBName = module.mysql_database.DBName
-  S3_name = ""
+  S3_name = var.bucket_name
   region = var.region
 }

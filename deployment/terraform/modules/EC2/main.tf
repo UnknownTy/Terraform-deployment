@@ -26,6 +26,9 @@ resource "aws_launch_template" "application_template" {
 
     vpc_security_group_ids = [var.private_sg]
     user_data = data.cloudinit_config.server_config.rendered
+    iam_instance_profile {
+      arn = var.instance_profile_arn
+    }
 }
 resource "aws_autoscaling_group" "application_scaling" {
     vpc_zone_identifier = var.private_subnets

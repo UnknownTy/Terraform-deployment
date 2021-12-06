@@ -43,6 +43,15 @@ build{
         source = "./socialSomething.service"
         destination = "/tmp/socialSomething.service"
     }
+    #Configure AWS Logs for Cloudwatch
+    provisioner "file" {
+        source = "./awslogs.conf"
+        destination = "/tmp/awslogs.conf"
+    }
+    provisioner "file" {
+        source = "./awscli.conf"
+        destination = "/tmp/awscli.conf"
+    }
     // Transfer over the generated .tgz
     provisioner "file" {
         source = "./social_something.tgz"

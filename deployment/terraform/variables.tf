@@ -6,3 +6,7 @@ variable "database_admin_password" {
   description = "Password to be used to connect to the RDS Database"
   type        = string
 }
+variable "bucket_name" {
+  description = "Name of the bucket to be used"
+  type = string
+}
