@@ -20,6 +20,19 @@ resource "aws_lb_listener" "front_end" {
     target_group_arn = aws_lb_target_group.app_tg.arn
   }
 }
+# Listen for requests on port 443 and forward those requests to the target group
+// resource "aws_lb_listener" "front_end" {
+//   load_balancer_arn = aws_lb.http_lb.arn
+//   port              = "443"
+//   protocol          = "HTTPS"
+//   ssl_policy = "ELBSecurityPolicy-2016-08"
+//   certificate_arn = var.cert_arn
+
+//   default_action {
+//     type             = "forward"
+//     target_group_arn = aws_lb_target_group.app_tg.arn
+//   }
+// }
 
 # Create a target group that will send traffic over port 8080
 resource "aws_lb_target_group" "app_tg" {

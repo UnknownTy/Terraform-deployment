@@ -10,6 +10,10 @@ variable "vpc_id" {
     description = "VPC of the entire application"
     type = string
 }
+variable "cert_arn" {
+    description = "SSL Certificate validation ARN"
+    type = string
+}
 // variable "instance_ids" {
 //     description = "Instances for the LB to direct to"
 //     type = list

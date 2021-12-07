@@ -22,7 +22,9 @@ output "pub_lb_subnets" {
         aws_subnet.public_subnet_3.id
     ]
 }
-
+output "testing_sg_id" {
+    value = aws_security_group.testing_group.id
+}
 output "rds_sg_id" {
     value = aws_security_group.database_sg.id
 }

@@ -10,7 +10,7 @@ resource "aws_db_instance" "mysql" {
     engine_version = "8.0"
     instance_class = "db.t2.micro"
 
-    name = "social_something_DB"
+    name = "social_something"
     username = "party_people"
     password = var.database_admin_password
 

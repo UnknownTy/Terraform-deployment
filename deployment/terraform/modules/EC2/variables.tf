@@ -6,6 +6,18 @@ variable "private_sg" {
     description = "Security group to connect to"
     type = string
 }
+variable "public_subnet" {
+    description = "For testing purposes only."
+    type = string
+}
+variable "test_sg_id" {
+    description = "For testing purposes only."
+    type = string
+}
+variable "ssh_key" {
+    description = "For testing purposes only."
+    type = string
+}
 variable "target_arn" {
     description = "ARN for the LB's target group"
     type = string

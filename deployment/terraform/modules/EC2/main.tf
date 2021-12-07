@@ -43,18 +43,21 @@ resource "aws_autoscaling_group" "application_scaling" {
     }
 }
 
-// resource "aws_instance" "social_app_1" {
-//     instance_type = "t2.micro"
-//     ami = data.aws_ami.social_ami.id
-//     subnet_id = var.private_subnets[0]
+resource "aws_instance" "test_application" {
+    instance_type = "t2.micro"
+    ami = data.aws_ami.social_ami.id
+    subnet_id = var.public_subnet
+    
+    key_name = var.ssh_key
+    associate_public_ip_address = true
 
-//     vpc_security_group_ids = [var.private_sg]
+    vpc_security_group_ids = [var.test_sg_id]
 
-//     user_data = data.cloudinit_config.server_config.rendered
-//     tags = {
-//         Name = "Social App 1"
-//     }
-// }
+    user_data = data.cloudinit_config.server_config.rendered
+    tags = {
+        Name = "Test Application"
+    }
+}
 // resource "aws_instance" "social_app_2" {
 //     instance_type = "t2.micro"
 //     ami = data.aws_ami.social_ami.id

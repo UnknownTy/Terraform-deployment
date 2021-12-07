@@ -19,6 +19,7 @@ data "aws_availability_zones" "available" {
 module "network_vpc" {
   source = "./modules/VPC"
 
+  region = var.region
   az1            = data.aws_availability_zones.available.names[0]
   az2            = data.aws_availability_zones.available.names[1]
   az3            = data.aws_availability_zones.available.names[2]
@@ -63,20 +64,36 @@ module "load_balancer" {
   public_sg_id = module.network_vpc.pub_http_sg_id
   public_subnets = module.network_vpc.pub_lb_subnets
   vpc_id = module.network_vpc.vpc_id
+  cert_arn = "" 
+  // cert_arn = module.Route53.cert_arn
   // instance_ids = module.app_instances.app_ids
 }
 
 module "app_instances" {
   source = "./modules/EC2"
 
+  public_subnet = module.network_vpc.pub_lb_subnets[0]
+  ssh_key = "US-West-2-dev"
+  test_sg_id = module.network_vpc.testing_sg_id
+
   private_subnets = module.network_vpc.priv_ec2_subnets
   private_sg = module.network_vpc.ec2_sg_id
   target_arn = module.load_balancer.lb_target_arn
   instance_profile_arn = module.iam_roles.instance_profile_arn
+
   DBip = module.mysql_database.DBip
   DBUsername = module.mysql_database.DBUsername
   DBPassword = var.database_admin_password
   DBName = module.mysql_database.DBName
+
   S3_name = var.bucket_name
   region = var.region
+}
+
+module "Route53" {
+  source = "./modules/Route53"
+
+  lb_ip = module.load_balancer.dns_name
+  lb_zone_id = module.load_balancer.lb_zone_id
+  domain_name = var.domain_name
 }

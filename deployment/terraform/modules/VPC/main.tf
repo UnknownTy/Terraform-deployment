@@ -132,6 +132,63 @@ resource "aws_route_table_association" "public_3_rt_a" {
     route_table_id = aws_route_table.public_route_table.id
 }
 
+resource "aws_vpc_endpoint" "s3" {
+    vpc_id = aws_vpc.main.id
+    service_name = "com.amazonaws.${var.region}.s3"
+}
+resource "aws_security_group" "cloudwatch" {
+    name = "Cloudwatch"
+    vpc_id = aws_vpc.main.id
+
+    ingress {
+        from_port = 0
+        to_port = 0
+        protocol = -1
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = -1
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+}
+resource "aws_vpc_endpoint" "logs" {
+    vpc_id = aws_vpc.main.id
+    service_name = "com.amazonaws.${var.region}.logs"
+    vpc_endpoint_type = "Interface"
+    subnet_ids = [
+        aws_subnet.ec2_priv_subnet_1.id,
+        aws_subnet.ec2_priv_subnet_2.id,
+        aws_subnet.ec2_priv_subnet_3.id
+    ]
+    security_group_ids = [aws_security_group.cloudwatch.id]
+}
+resource "aws_route_table" "private_route_table" {
+    vpc_id = aws_vpc.main.id
+
+    tags = {
+        Name = "Private Route Table"
+    }
+}
+resource "aws_vpc_endpoint_route_table_association" "s3_association" {
+    route_table_id = aws_route_table.private_route_table.id
+    vpc_endpoint_id = aws_vpc_endpoint.s3.id
+}
+resource "aws_route_table_association" "private_1_rt_a" {
+    subnet_id = aws_subnet.ec2_priv_subnet_1.id
+    route_table_id = aws_route_table.private_route_table.id
+}
+resource "aws_route_table_association" "private_2_rt_a" {
+    subnet_id = aws_subnet.ec2_priv_subnet_2.id
+    route_table_id = aws_route_table.private_route_table.id
+}
+resource "aws_route_table_association" "private_3_rt_a" {
+    subnet_id = aws_subnet.ec2_priv_subnet_3.id
+    route_table_id = aws_route_table.private_route_table.id
+}
+
 resource "aws_security_group" "public_sg" {
     name = "HTTP"
     vpc_id = aws_vpc.main.id
@@ -187,6 +244,43 @@ resource "aws_security_group" "database_sg" {
   }
 
   egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group" "testing_group" {
+    name = "test_conn"
+    description = "Allow SSH, MySQL & 8080 from all"
+    vpc_id = aws_vpc.main.id
+    tags = {
+        Name = "test_conn"
+    }
+
+    ingress {
+        description = "SSH"
+        from_port   = 22
+        to_port     = 22
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+    ingress {
+        description = "MySQL"
+        from_port   = 3306
+        to_port     = 3306
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+    ingress {
+        description = "Application Port"
+        from_port   = 8080
+        to_port     = 8080
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+    egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
