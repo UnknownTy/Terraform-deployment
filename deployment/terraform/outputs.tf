@@ -10,3 +10,6 @@ output "db_username" {
 output "db_name" {
   value = module.mysql_database.DBName
 }
+output "mysql_dump_command" {
+  value = "mysql -h ${module.mysql_database.DBip} -u ${module.mysql_database.DBUsername} -p ${module.mysql_database.DBName} < database.sql"
+}

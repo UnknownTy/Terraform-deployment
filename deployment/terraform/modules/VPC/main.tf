@@ -1,5 +1,6 @@
 resource "aws_vpc" "main" {
     cidr_block = var.vpc_cidr_block
+    enable_dns_hostnames = true
 
     tags = {
         Name = "Social Something Private Cloud"
@@ -164,6 +165,7 @@ resource "aws_vpc_endpoint" "logs" {
         aws_subnet.ec2_priv_subnet_3.id
     ]
     security_group_ids = [aws_security_group.cloudwatch.id]
+    private_dns_enabled = true
 }
 resource "aws_route_table" "private_route_table" {
     vpc_id = aws_vpc.main.id
