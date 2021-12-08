@@ -64,8 +64,8 @@ module "load_balancer" {
   public_sg_id = module.network_vpc.pub_http_sg_id
   public_subnets = module.network_vpc.pub_lb_subnets
   vpc_id = module.network_vpc.vpc_id
-  cert_arn = "" 
-  // cert_arn = module.Route53.cert_arn
+  // cert_arn = "" 
+  cert_arn = module.Route53.cert_arn
   // instance_ids = module.app_instances.app_ids
 }
 
