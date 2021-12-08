@@ -81,7 +81,7 @@ module "app_instances" {
   source = "./modules/EC2"
 
   public_subnet = module.network_vpc.pub_lb_subnets[0]
-  ssh_key       = "US-West-2-dev"
+  ssh_key       = var.ssh_key
   test_sg_id    = module.network_vpc.testing_sg_id
 
   private_subnets      = module.network_vpc.priv_ec2_subnets

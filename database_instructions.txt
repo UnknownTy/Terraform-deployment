@@ -1,0 +1,12 @@
+In order to install use the database you must manually assign the schema to it first.
+To do this you can do the following:
+
+1. Uncomment the EC2 Test Instance at the bottom of the EC2 Module
+2. Terraform Apply to create the new Test Instance
+3. SSH into the Test Instance in your preferred method
+4. Use the command `sudo yum install mysql -y`
+5. Copy and paste the MySQL_dump_command from the terraform output into the EC2 Instance's Terminal
+6. Enter the RDS' Password
+
+All done! The RDS database now has the schema attached to it.
+You can now re-comment the EC2 instance and terraform apply to remove it from AWS.
