@@ -8,9 +8,9 @@ variable "database_admin_password" {
 }
 variable "bucket_name" {
   description = "Name of the bucket to be used"
-  type = string
+  type        = string
 }
 variable "domain_name" {
   description = "Domain name to be connected to the server"
-  type = string
+  type        = string
 }

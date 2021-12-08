@@ -29,8 +29,8 @@ resource "aws_lb_listener" "front_end_secure" {
   load_balancer_arn = aws_lb.http_lb.arn
   port              = "443"
   protocol          = "HTTPS"
-  ssl_policy = "ELBSecurityPolicy-2016-08"
-  certificate_arn = var.cert_arn
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = var.cert_arn
 
   default_action {
     type             = "forward"
@@ -40,10 +40,10 @@ resource "aws_lb_listener" "front_end_secure" {
 
 # Create a target group that will send traffic over port 8080
 resource "aws_lb_target_group" "app_tg" {
-    name     = "app-tg"
-    port     = 8080
-    protocol = "HTTP"
-    vpc_id   = var.vpc_id
+  name     = "app-tg"
+  port     = 8080
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
 }
 
 // # Direct the traffic to the ec2 instance

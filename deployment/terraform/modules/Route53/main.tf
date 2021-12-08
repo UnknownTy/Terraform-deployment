@@ -1,21 +1,21 @@
 resource "aws_acm_certificate" "cert" {
-    domain_name = "final.${var.domain_name}"
-    validation_method = "DNS"
+  domain_name       = "final.${var.domain_name}"
+  validation_method = "DNS"
 }
 data "aws_route53_zone" "main" {
-    name = "${var.domain_name}"
+  name = var.domain_name
 }
-resource "aws_route53_record" "final"{
-    allow_overwrite = true
-    zone_id = data.aws_route53_zone.main.zone_id
-    name = "final.${var.domain_name}"
-    type = "A"
+resource "aws_route53_record" "final" {
+  allow_overwrite = true
+  zone_id         = data.aws_route53_zone.main.zone_id
+  name            = "final.${var.domain_name}"
+  type            = "A"
 
-    alias {
-        name = var.lb_ip
-        zone_id = var.lb_zone_id
-        evaluate_target_health = true
-    }
+  alias {
+    name                   = var.lb_ip
+    zone_id                = var.lb_zone_id
+    evaluate_target_health = true
+  }
 }
 resource "aws_route53_record" "main" {
   for_each = {
@@ -35,5 +35,5 @@ resource "aws_route53_record" "main" {
 }
 
 resource "aws_acm_certificate_validation" "complete" {
-  certificate_arn         = aws_acm_certificate.cert.arn
+  certificate_arn = aws_acm_certificate.cert.arn
 }

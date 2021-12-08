@@ -4,59 +4,59 @@ data "cloudinit_config" "server_config" {
   part {
     content_type = "text/cloud-config"
     content = templatefile("${path.module}/socialEnv.yml", {
-      db_ip: var.DBip
-      db_user: var.DBUsername
+      db_ip : var.DBip
+      db_user : var.DBUsername
       db_password : var.DBPassword
-      db_name: var.DBName
-      s3_region: var.region
-      s3_name: var.S3_name
+      db_name : var.DBName
+      s3_region : var.region
+      s3_name : var.S3_name
     })
   }
 }
 
 data "aws_ami" "social_ami" {
-    most_recent = true
-    name_regex = "socialSomething-app-*"
-    owners = ["self"]
+  most_recent = true
+  name_regex  = "socialSomething-app-*"
+  owners      = ["self"]
 }
 resource "aws_launch_template" "application_template" {
-    name_prefix = "Social_Something-"
-    image_id = data.aws_ami.social_ami.id
-    instance_type = "t2.micro"
+  name_prefix   = "Social_Something-"
+  image_id      = data.aws_ami.social_ami.id
+  instance_type = "t2.micro"
 
-    vpc_security_group_ids = [var.private_sg]
-    user_data = data.cloudinit_config.server_config.rendered
-    iam_instance_profile {
-      arn = var.instance_profile_arn
-    }
+  vpc_security_group_ids = [var.private_sg]
+  user_data              = data.cloudinit_config.server_config.rendered
+  iam_instance_profile {
+    arn = var.instance_profile_arn
+  }
 }
 resource "aws_autoscaling_group" "application_scaling" {
-    vpc_zone_identifier = var.private_subnets
-    max_size = 5
-    min_size = 3
+  vpc_zone_identifier = var.private_subnets
+  max_size            = 5
+  min_size            = 3
 
-    target_group_arns = [var.target_arn]
+  target_group_arns = [var.target_arn]
 
-    launch_template {
-        id = aws_launch_template.application_template.id
-        version = "$Latest"
-    }
+  launch_template {
+    id      = aws_launch_template.application_template.id
+    version = "$Latest"
+  }
 }
 
 resource "aws_instance" "test_application" {
-    instance_type = "t2.micro"
-    ami = data.aws_ami.social_ami.id
-    subnet_id = var.public_subnet
-    
-    key_name = var.ssh_key
-    associate_public_ip_address = true
+  instance_type = "t2.micro"
+  ami           = data.aws_ami.social_ami.id
+  subnet_id     = var.public_subnet
 
-    vpc_security_group_ids = [var.test_sg_id]
+  key_name                    = var.ssh_key
+  associate_public_ip_address = true
 
-    user_data = data.cloudinit_config.server_config.rendered
-    tags = {
-        Name = "Test Application"
-    }
+  vpc_security_group_ids = [var.test_sg_id]
+
+  user_data = data.cloudinit_config.server_config.rendered
+  tags = {
+    Name = "Test Application"
+  }
 }
 // resource "aws_instance" "social_app_2" {
 //     instance_type = "t2.micro"

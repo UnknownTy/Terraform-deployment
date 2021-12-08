@@ -1,12 +1,12 @@
 data "aws_iam_policy" "cloudwatch" {
-    arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+  arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 resource "aws_iam_policy" "allow_s3" {
-    name = "allow_s3"
-    path = "/"
-    description = "Allow EC2 instances to connect to ${var.bucket_name}"
-    policy = jsonencode({
-        "Version" : "2012-10-17",
+  name        = "allow_s3"
+  path        = "/"
+  description = "Allow EC2 instances to connect to ${var.bucket_name}"
+  policy = jsonencode({
+    "Version" : "2012-10-17",
     "Statement" : [
       {
         "Sid" : "VisualEditor0",
@@ -22,13 +22,13 @@ resource "aws_iam_policy" "allow_s3" {
         ]
       }
     ]
-    })
+  })
 }
 
 resource "aws_iam_role" "ec2_cloud_s3" {
-    name = "ec2_cloud_s3_connection"
+  name = "ec2_cloud_s3_connection"
 
-      # This is a role for EC2 instances
+  # This is a role for EC2 instances
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -44,8 +44,8 @@ resource "aws_iam_role" "ec2_cloud_s3" {
   })
 
   managed_policy_arns = [
-      aws_iam_policy.allow_s3.arn,
-      data.aws_iam_policy.cloudwatch.arn
+    aws_iam_policy.allow_s3.arn,
+    data.aws_iam_policy.cloudwatch.arn
   ]
 }
 
