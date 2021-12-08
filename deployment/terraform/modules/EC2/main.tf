@@ -1,3 +1,4 @@
+// Cloud init that sets the app.env
 data "cloudinit_config" "server_config" {
   gzip          = true
   base64_encode = true
@@ -13,12 +14,15 @@ data "cloudinit_config" "server_config" {
     })
   }
 }
-
+// Source most recent application AMI
 data "aws_ami" "social_ami" {
   most_recent = true
   name_regex  = "socialSomething-app-*"
   owners      = ["self"]
 }
+
+// Launch tempplate for the application.
+// Builds on a free EC2 Instance & connects up to cloudwatch
 resource "aws_launch_template" "application_template" {
   name_prefix   = "Social_Something-"
   image_id      = data.aws_ami.social_ami.id
@@ -30,6 +34,8 @@ resource "aws_launch_template" "application_template" {
     arn = var.instance_profile_arn
   }
 }
+
+// Autoscaling group
 resource "aws_autoscaling_group" "application_scaling" {
   vpc_zone_identifier = var.private_subnets
   max_size            = 5
@@ -43,42 +49,23 @@ resource "aws_autoscaling_group" "application_scaling" {
   }
 }
 
-resource "aws_instance" "test_application" {
-  instance_type = "t2.micro"
-  ami           = data.aws_ami.social_ami.id
-  subnet_id     = var.public_subnet
+#TEST APPLICATION - Only enable to create a secondary machine you can SSH into.
+# Use this to add the database schema to the RDS.
+# First install MySQL to it, then use the mysql_dump_command output to automatically dump the schema to the DB.
+# Afterwards this section can be commented out again to be removed.
 
-  key_name                    = var.ssh_key
-  associate_public_ip_address = true
+// resource "aws_instance" "test_application" {
+//   instance_type = "t2.micro"
+//   ami           = data.aws_ami.social_ami.id
+//   subnet_id     = var.public_subnet
 
-  vpc_security_group_ids = [var.test_sg_id]
+//   key_name                    = var.ssh_key
+//   associate_public_ip_address = true
 
-  user_data = data.cloudinit_config.server_config.rendered
-  tags = {
-    Name = "Test Application"
-  }
-}
-// resource "aws_instance" "social_app_2" {
-//     instance_type = "t2.micro"
-//     ami = data.aws_ami.social_ami.id
-//     subnet_id = var.private_subnets[1]
+//   vpc_security_group_ids = [var.test_sg_id]
 
-//     vpc_security_group_ids = [var.private_sg]
-
-//     user_data = data.cloudinit_config.server_config.rendered
-//     tags = {
-//         Name = "Social App 2"
-//     }
-// }
-// resource "aws_instance" "social_app_3" {
-//     instance_type = "t2.micro"
-//     ami = data.aws_ami.social_ami.id
-//     subnet_id = var.private_subnets[2]
-
-//     vpc_security_group_ids = [var.private_sg]
-
-//     user_data = data.cloudinit_config.server_config.rendered
-//     tags = {
-//         Name = "Social App 3"
-//     }
+//   user_data = data.cloudinit_config.server_config.rendered
+//   tags = {
+//     Name = "Test Application"
+//   }
 // }

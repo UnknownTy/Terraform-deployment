@@ -1,6 +1,9 @@
 data "aws_iam_policy" "cloudwatch" {
   arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
+
+//Allows S3 connection to EC2 instances to the given bucket name
+// Required to allow the private EC2 instances to access the bucket
 resource "aws_iam_policy" "allow_s3" {
   name        = "allow_s3"
   path        = "/"
@@ -25,6 +28,7 @@ resource "aws_iam_policy" "allow_s3" {
   })
 }
 
+// The IAM role to be attached to EC2 instances
 resource "aws_iam_role" "ec2_cloud_s3" {
   name = "ec2_cloud_s3_connection"
 
@@ -49,6 +53,7 @@ resource "aws_iam_role" "ec2_cloud_s3" {
   ]
 }
 
+// IAM roles cannot be attached directly, as such the instance profile is created
 resource "aws_iam_instance_profile" "cloud_s3_instance_profile" {
   name = "Cloud-S3-Instance-Profile"
   role = aws_iam_role.ec2_cloud_s3.name

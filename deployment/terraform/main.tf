@@ -12,10 +12,13 @@ provider "aws" {
   region = var.region
 }
 
+// Gets all active availability zones. 
+//This ensures that we have 3 availability zones in the selected region.
 data "aws_availability_zones" "available" {
   state = "available"
 }
 
+//Setup the VPC and its respective security groups & gateways
 module "network_vpc" {
   source = "./modules/VPC"
 
@@ -39,6 +42,7 @@ module "network_vpc" {
   pub_lb_subnet_3 = "10.0.32.0/24"
 }
 
+// Setup the MySQL RDS Database
 module "mysql_database" {
   source = "./modules/DB"
 
@@ -47,28 +51,32 @@ module "mysql_database" {
   database_admin_password = var.database_admin_password
   rds_private_subnets     = module.network_vpc.priv_rds_subnets
 }
+
+// Setup the S3 Bucket
 module "bucket" {
   source = "./modules/S3"
 
   bucket_name = var.bucket_name
 }
+
+// Setup the IAM roles for EC2 Instances
 module "iam_roles" {
   source = "./modules/IAM"
 
   bucket_name = var.bucket_name
 }
 
+// Setup an HTTPS Load balancer
 module "load_balancer" {
   source = "./modules/LB"
 
   public_sg_id   = module.network_vpc.pub_http_sg_id
   public_subnets = module.network_vpc.pub_lb_subnets
   vpc_id         = module.network_vpc.vpc_id
-  // cert_arn = "" 
-  cert_arn = module.Route53.cert_arn
-  // instance_ids = module.app_instances.app_ids
+  cert_arn       = module.Route53.cert_arn
 }
 
+// Create the elastic instanes used by the load balancer
 module "app_instances" {
   source = "./modules/EC2"
 
@@ -90,6 +98,7 @@ module "app_instances" {
   region  = var.region
 }
 
+// Setup the routing and SSL certificate used for the domain name.
 module "Route53" {
   source = "./modules/Route53"
 
